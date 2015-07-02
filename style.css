@@ -1,0 +1,10 @@
+#sidebar{
+padding-top: 20px;
+height: 700px;
+border-style: solid;
+border-color: #F2F1F1;
+border-width: 1px;
+}
+#canvasbar{
+  height: 700px;
+}
