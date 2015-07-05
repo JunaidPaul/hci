@@ -2,99 +2,124 @@
 var canvas = document.getElementById('myCanvas');
 var context = canvas.getContext('2d');
 
+
+var mode = '';
+
 var shapes = [];
 var index = 0;
 var mousedown = false;
 
-// Line constructor
-var Line = function(x, y, a, b){
-  this.c=document.getElementById("myCanvas");
-  this.ctx=this.c.getContext("2d");
-  this.ctx.beginPath();
-  this.ctx.moveTo(x,y);
-  this.ctx.lineTo(a,b);
-};
-Line.prototype.draw = function(ctx) {
-  this.ctx.stroke();
-}
 
 var redraw = function(){
   clearCanvas();
   for(var i=0;i<shapes.length; i++){
-    var line = new Line(shapes[i].x,shapes[i].y,shapes[i].a,shapes[i].b);
-    line.draw();
+    switch (shapes[i].type) {
+      case 'line':
+          var x = shapes[i].constructorpoints[0][0];
+          var y = shapes[i].constructorpoints[0][1];
+          var a = shapes[i].constructorpoints[1][0];
+          var b = shapes[i].constructorpoints[1][1];
+          var line = new Line(x,y,a,b);
+          line.draw();
+          break;
+      default:
+
+    }
+
   }
 }
 
- var clearCanvas = function(){
+var clearCanvas = function(){
   console.log("clearCanvas");
   context.clearRect(0, 0, 1000, 1000);
 }
 
 
+var canvasMousedown = function(event){
+
+  console.log("canvasMousedown");
+  mousedown = true;
+  mx = event.offsetX;
+  my = event.offsetY;
+
+  switch (mode) {
+    case 'line':
+
+        shapes.push({
+          'type': 'line',
+          'constructorpoints': [],
+          'selection': []
+          });
+
+         shapes[index].constructorpoints.push ([mx,my]);
+         shapes[index].constructorpoints.push ([mx,my]);
+         shapes[index].selection.push ([mx,my]);
+         shapes[index].selection.push ([mx,my]);
+
+        var line = new Line(mx,my,mx,my);
+        break;
+    case 'move':
+        indexSelected = selection(mx, my);
+        break;
+    default:
+        break;
+
+  }
 
 
-var createLine = function(event){
+}
+var canvasMousemove = function(event){
 
-      var x;
-      var y;
-      var a;
-      var b;
+  var a;
+  var b;
 
-      $('#line').removeClass('btn-primary');
-      $('#line').addClass('btn-default');
+  if(mousedown == true){
+    a = event.offsetX;
+    b = event.offsetY;
 
-      // Capture mouse move event
-      canvas.addEventListener("mousedown",down, false);
-      function down(event){
+    switch(mode){
+      case 'line':
 
-         mousedown = true;
+        shapes[index].constructorpoints.pop();
+        shapes[index].constructorpoints.push ([a, b]);
 
-         console.log(event);
-         x = event.offsetX;
-         y = event.offsetY;
+        shapes[index].selection.pop();
+        shapes[index].selection.push ([a, b]);
 
-         shapes.push({
+        redraw();
+      case 'move':
 
-           'type': 'line',
-           'a': x,
-           'b': y,
-           'x': x,
-           'y': y,
-           'selection': []
 
-           });
-          shapes[index].selection.push ([x,y]);
-          shapes[index].selection.push ([x,y]);
+        for(var i=0;i<shapes[indexSelected.constructorpoints.length;])
+        console.log(shapes[indexSelected].constructorpoints[0][]);
 
-         var line = new Line(x,y,x,y);
+      break;
 
-       }
 
-        canvas.addEventListener("mousemove", move, false);
-        function move(event){
-          if(mousedown == true){
-            a = event.offsetX;
-            b = event.offsetY;
+      default:
+      break;
+    }
 
-           shapes[index].a = a;
-           shapes[index].b = b;
+  }
 
-           shapes[index].selection.pop();
-           shapes[index].selection.push ([a, b]);
+}
 
-           redraw();
-          }
-        }
+var canvasMouseup = function(event){
 
-        canvas.addEventListener("mouseup", up, false);
-        function up(){
-          mousedown = false;
-          midx = (shapes[index].x +shapes[index].a)/2;
-          midy = (shapes[index].y +shapes[index].b)/2;
-          shapes[index].selection.push([midx,midy]);
-          console.log(shapes[index].selection);
-          index = index+1;
+  mousedown = false;
+  switch (mode) {
+    case 'line':
+      var midx;
+      var midy;
 
-        }
+      midx = (shapes[index].x +shapes[index].a)/2;
+      midy = (shapes[index].y +shapes[index].b)/2;
+      shapes[index].selection.push([midx,midy]);
+      console.log(shapes[index].selection);
+      index = index+1;
+      break;
+    default:
+     break;
+
+  }
 }

@@ -17,7 +17,7 @@
   <div class="row">
 
     <div id="sidebar" class="col-sm-3" >
-        <button type="button" id='line' class="btn btn-primary btn-sm" onclick="createLine(event)">Line</button>
+        <button type="button" id='line' class="btn btn-primary btn-sm" onclick="lineSelection()">Line</button>
         <button type="button" class="btn btn-primary btn-sm">Rectangle</button>
         <button type="button" class="btn btn-primary btn-sm">Circle</button>
         <button type="button" class="btn btn-primary btn-sm">Ellipse</button>
@@ -26,7 +26,11 @@
         <hr>
         <button type="button" class="btn btn-default btn-xs" onclick="redraw()">Redraw</button>
         <button type="button" class="btn btn-default btn-xs" onclick="clearCanvas()">Delete</button>
-        <button type="button" class="btn btn-default btn-xs" onclick="selection()">Select</button>
+        <hr>
+        <button type="button" class="btn btn-default btn-xs" onclick="moveSelection()">Move</button>
+        <button type="button" class="btn btn-default btn-xs">Copy</button>
+        <button type="button" class="btn btn-default btn-xs">Paste</button>
+        <button type="button" class="btn btn-default btn-xs">Colour</button>
         <hr>
         <label>Filename to save as:</label>
         <input id="inputFileNameToSaveAs"></input>
@@ -38,8 +42,8 @@
         <button class="btn btn-default btn-xs" onclick="loadFileAsText()">Load Selected File</button>
     </div>
 
-    <div id="canvasbar" class="col-sm-9">
-      <canvas id="myCanvas" width="1000" height="700">
+    <div id="canvasbar" class="col-sm-9" >
+      <canvas id="myCanvas" width="1000" height="700" onmousedown="canvasMousedown(event)" onmousemove="canvasMousemove(event)" onmouseup="canvasMouseup(event)">
       Your browser does not support the HTML5 canvas tag.
       </canvas>
     </div>
@@ -48,6 +52,8 @@
 </div>
 <script type="text/javascript" src="index.js"></script>
 <script src="./lib/save.js"></script>
+<script src="./lib/button.js"></script>
 <script src="./lib/selection.js"></script>
+<script src="./constructors/line.js"></script>
 </body>
 </html>
